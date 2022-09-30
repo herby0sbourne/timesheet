@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 
 type FormInputProps = {
     label: string;
@@ -8,13 +8,7 @@ type FormInputProps = {
     onChangeHandler: ChangeEventHandler<HTMLInputElement>;
 };
 
-const FromInput = ({
-    label,
-    name,
-    onChangeHandler,
-    inputValue,
-    displayDate,
-}: FormInputProps) => {
+const FromInput = ({ label, name, onChangeHandler, inputValue, displayDate }: FormInputProps) => {
     const textColor = name === "clockIn" ? "text-green-500" : "text-[#e42664]";
     return (
         <div className="time-input flex items-center flex-col mb-8">
@@ -35,7 +29,6 @@ const FromInput = ({
                 <span className={"text-gray-400"}>{displayDate[0]}</span>
                 <span>{displayDate[1]}</span>
                 <span className={textColor}>{displayDate[2]}</span>
-                {/*<span className={"text-green-500"}>{displayDate[2]}</span>*/}
             </div>
         </div>
     );
