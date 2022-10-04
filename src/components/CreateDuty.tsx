@@ -1,75 +1,57 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
+import MaterialUIPickers from "./MaterialUIPickers";
+import { StoreContext } from "../context/Store";
+import displayDate from "../utils/displayDate";
+import DisplayDate from "./DisplayDate";
+import CustomBtn from "./CustomBtn";
+import moment from "moment";
 
 const CreateDuty = () => {
-    const [checkIn, setCheckIn] = useState("");
-    const [checkOut, setCheckOut] = useState("");
+    // @ts-ignore
+    const { StartShift, endShift, duration, createDuty, endDuty } = useContext(StoreContext);
+    const [displayCheckIn, setDisplayCheckIn] = useState<string[] | string>([]);
+    const [displayCheckOut, setDisplayCheckOut] = useState<string[] | string>([]);
 
     useEffect(() => {
-        const today = new Date().toDateString();
-        const today2 = new Date().toString();
-        const today3 = new Date().toLocaleString();
-        const today4 = new Date().toISOString().substring(0, 16);
-        console.log({ today, today2, today3, today4 });
+        setDisplayCheckIn(displayDate(StartShift));
+    }, [StartShift]);
 
-        setCheckIn(today4);
-        // setCheckIn("2022-09-16T15:05");
-    }, []);
-
-    const dateConverter = () => {
-        const options = {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        };
-        const today = new Date();
-
-        // @ts-ignore
-        console.log(today.toLocaleDateString("en-US", options)); // 9/17/2016
-    };
-
-    // dateConverter();
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-
-        if (name === "clockIn") {
-            setCheckIn(value);
-        } else {
-            setCheckOut(value);
-        }
-    };
+    useEffect(() => {
+        setDisplayCheckOut(displayDate(endShift));
+    }, [endShift]);
 
     const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log({ checkIn, checkOut });
-        // console.log(e.target.elements.option.value);
     };
-    return (
-        <form onSubmit={onSubmitHandler}>
-            <div className="form-group">
-                <label htmlFor="clockIn">Clock in</label>
-                <input
-                    type="datetime-local"
-                    id="clockIn"
-                    name="clockIn"
-                    onChange={onChangeHandler}
-                    value={checkIn}
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="clockOut">Clock out</label>
-                <input
-                    type="datetime-local"
-                    id="clockOut"
-                    name="clockOut"
-                    onChange={onChangeHandler}
-                    value={checkOut}
-                />
-            </div>
 
-            <button type="submit">click me</button>
-        </form>
+    // console.log(displayCheckOut);
+    // console.log(moment(StartShift).format());
+    return (
+        <div className={"form-container h-screen"}>
+            <div className="container px-4 flex items-center justify-center flex-col">
+                <form onSubmit={onSubmitHandler} className={"pt-7 w-full"}>
+                    <div className="start-duty text-center">
+                        <h1 className={"font-semibold text-xl mb-3"}>Start Duty</h1>
+                        <MaterialUIPickers dutyType={createDuty} today={new Date()} />
+                        <DisplayDate displayDate={displayCheckIn} timeColor />
+                    </div>
+                    <div className="start-duty text-center">
+                        <h1 className={"font-semibold text-xl mb-3"}>End Duty</h1>
+                        <MaterialUIPickers dutyType={endDuty} today={null} />
+                        <DisplayDate displayDate={displayCheckOut} />
+                    </div>
+
+                    <div className="hours-worked flex gap-x-2 justify-start items-center">
+                        <h2 className="duration-worked text-xl font-extralight">Hours</h2>
+                        <p className="hours font-normal text-[1.2rem]">{duration}</p>
+                    </div>
+                    <div className="btn-options flex justify-end gap-x-5 mt-10">
+                        <CustomBtn title={"Cancel"} />
+                        <CustomBtn title={"Create Duty"} />
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 };
 
