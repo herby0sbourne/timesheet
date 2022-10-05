@@ -6,6 +6,7 @@ import displayDate from "../utils/displayDate";
 import DisplayDate from "./DisplayDate";
 import CustomBtn from "./CustomBtn";
 import moment from "moment";
+import InputGroup from "./InputGroup";
 
 interface CreateDutyProps {
     openModal: boolean;
@@ -42,7 +43,7 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
             unmountOnExit
             onEnter={() => closeModal(true)}
             onExited={() => closeModal(false)}>
-            <div className={"form-container h-screen modal"} ref={nodeRef}>
+            <div className={"form-container h-screen modal z-[99]"} ref={nodeRef}>
                 <div className="container px-4 flex items-center justify-center flex-col">
                     <form onSubmit={onSubmitHandler} className={"pt-7 w-full"}>
                         <div className="start-duty text-center">
@@ -60,9 +61,13 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
                             <h2 className="duration-worked text-xl font-extralight">Hours</h2>
                             <p className="hours font-normal text-[1.2rem]">{duration}</p>
                         </div>
+
+                        <InputGroup type="number" placeholder="rate or cost per hour" />
+                        <InputGroup type="text" placeholder="Location / job" />
+
                         <div className="btn-options flex justify-end gap-x-5 mt-10">
                             <CustomBtn title={"Cancel"} closeModal={closeModal} />
-                            <CustomBtn title={"Create Duty"} closeModal={closeModal} />
+                            <CustomBtn title={"Create"} closeModal={closeModal} />
                         </div>
                     </form>
                 </div>
