@@ -42,7 +42,8 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
             classNames="alert"
             unmountOnExit
             onEnter={() => closeModal(true)}
-            onExited={() => closeModal(false)}>
+            onExited={() => closeModal(false)}
+        >
             <div className={"form-container h-screen modal z-[99]"} ref={nodeRef}>
                 <div className="container px-4 flex items-center justify-center flex-col">
                     <form onSubmit={onSubmitHandler} className={"pt-7 w-full"}>
@@ -63,7 +64,7 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
                         </div>
 
                         <InputGroup type="number" placeholder="rate or cost per hour" />
-                        <InputGroup type="text" placeholder="Location / job" />
+                        <InputGroup type="text" placeholder="Location / Job" />
 
                         <div className="btn-options flex justify-end gap-x-5 mt-10">
                             <CustomBtn title={"Cancel"} closeModal={closeModal} />
