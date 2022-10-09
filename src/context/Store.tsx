@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import moment, { Moment } from "moment";
 
 export interface StoreContextInterface {
@@ -9,9 +9,13 @@ export interface StoreContextInterface {
     endDuty: (date: any) => any;
 }
 
+interface Props {
+    children: React.ReactNode;
+}
+
 export const StoreContext = createContext<StoreContextInterface | null>(null);
 
-const StoreProvider = ({ children }: any) => {
+const StoreProvider: React.FC<Props> = ({ children }) => {
     const [StartShift, setStartDuty] = useState<Moment | string>(moment(new Date()));
     const [endShift, setEndDuty] = useState<Moment | string>("");
     const [duration, setDuration] = useState(0);
