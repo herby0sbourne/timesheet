@@ -1,5 +1,5 @@
 import { HiPlus } from "../constant/icons";
-import JobCard from "./Job";
+import JobCard from "./JobCard";
 import JOBS from "../data/Jobs";
 
 const Home = () => {
