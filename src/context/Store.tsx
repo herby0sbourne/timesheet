@@ -5,8 +5,8 @@ export interface StoreContextInterface {
     StartShift: Moment | string;
     endShift: Moment | string;
     duration: number;
-    createDuty: (date: any) => any;
-    endDuty: (date: any) => any;
+    createDuty: (date: Moment | string) => void;
+    endDuty: (date: Moment | string) => void;
 }
 
 interface Props {
@@ -35,11 +35,11 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
         setDuration(totalHours);
     }, [StartShift, endShift]);
 
-    const createDuty = (StartShift: any) => {
+    const createDuty = (StartShift: Moment | string) => {
         setStartDuty(StartShift);
     };
 
-    const endDuty = (endShift: any) => {
+    const endDuty = (endShift: Moment | string) => {
         setEndDuty(endShift);
     };
 
