@@ -8,8 +8,6 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import { useContext, useEffect } from "react";
-import { StoreContext } from "../context/Store";
 
 interface MaterialUIPickersProps {
     dutyType: (date: Moment | null) => void;
