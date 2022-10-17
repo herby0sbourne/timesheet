@@ -6,6 +6,7 @@ import displayDate from "../utils/displayDate";
 import DisplayDate from "./DisplayDate";
 import CustomBtn from "./CustomBtn";
 import InputGroup from "./InputGroup";
+import { v4 as uuidv4 } from "uuid";
 
 interface CreateDutyProps {
     openModal: boolean;
@@ -13,7 +14,8 @@ interface CreateDutyProps {
 }
 
 const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
-    const { StartShift, endShift, duration, createDuty, endDuty } = useContext(StoreContext);
+    const { StartShift, endShift, duration, createDuty, endDuty, newDuty } =
+        useContext(StoreContext);
     const [displayCheckIn, setDisplayCheckIn] = useState<string[] | string>([]);
     const [displayCheckOut, setDisplayCheckOut] = useState<string[] | string>([]);
     const nodeRef = useRef(null);
@@ -28,6 +30,21 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
 
     const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const pay = duration * 310;
+        const duty = {
+            id: uuidv4(),
+            userId: 2,
+            clockInDay: StartShift?.format(),
+            clockOutDay: endShift?.format(),
+            clockedIn: StartShift?.format("LT"),
+            clockedOut: endShift?.format("LT"),
+            pay,
+            location: "cotton factory",
+            hoursWorked: duration,
+            rate: 310
+        };
+        newDuty(duty);
+        console.log(duty);
     };
 
     // console.log(displayCheckOut);
@@ -40,7 +57,8 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
             classNames="alert"
             unmountOnExit
             onEnter={() => closeModal(true)}
-            onExited={() => closeModal(false)}>
+            onExited={() => closeModal(false)}
+        >
             <div className={"form-container h-screen modal z-[99]"} ref={nodeRef}>
                 <div className="container px-4 flex items-center justify-center flex-col">
                     <form onSubmit={onSubmitHandler} className={"pt-7 w-full"}>
