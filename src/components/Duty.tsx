@@ -1,14 +1,17 @@
 import { IDuty } from "../provider/Store";
+import moment from "moment";
 
 interface DutyProps {
     duty: IDuty;
 }
 
 const Duty = ({ duty }: DutyProps) => {
+    const clockInDay = moment(duty.clockInDay).format("MMMM Do, YYYY");
+
     return (
         <div className="duty bg-[#f9f7f6] px-4 pt-4 pb-2 border-b-2 border-[#f5deb3]">
             <div className="date flex justify-between items-center">
-                <div className="date-worked">{duty.clockInDay}</div>
+                <div className="date-worked">{clockInDay}</div>
                 <div className="cost">${duty.pay}</div>
             </div>
             <div className="work-hours">
