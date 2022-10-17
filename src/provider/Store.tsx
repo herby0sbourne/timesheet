@@ -22,6 +22,8 @@ export interface StoreContextInterface {
     createDuty: (date: Moment | null) => void;
     endDuty: (date: Moment | null) => void;
     duties: IDuty[];
+    // setDuty: React.Dispatch<React.SetStateAction<IDuty[]>>;
+    newDuty: (duty: any) => void;
 }
 
 interface Props {
@@ -45,9 +47,9 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
         const duration = moment.duration(endTime.diff(startTime));
 
         const hours = duration.asHours();
-        console.log(hours);
+        // console.log(hours);
         const totalHours = Math.round(hours);
-        console.log(totalHours);
+        // console.log(totalHours);
         if (!totalHours) return;
         setDuration(totalHours);
     }, [StartShift, endShift]);
@@ -60,9 +62,17 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
         setEndDuty(endShift);
     };
 
+    const newDuty = (duty: IDuty) => {
+        // @ts-ignore
+        setDuty((prevState) => {
+            return [...prevState, duty];
+        });
+    };
+
     return (
         <StoreContext.Provider
-            value={{ StartShift, endShift, duration, duties, createDuty, endDuty }}>
+            value={{ StartShift, endShift, duration, duties, createDuty, endDuty, newDuty }}
+        >
             {children}
         </StoreContext.Provider>
     );
