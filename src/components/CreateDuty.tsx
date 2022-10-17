@@ -1,11 +1,10 @@
 import React, { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import MaterialUIPickers from "./MaterialUIPickers";
-import { StoreContext } from "../context/Store";
+import { StoreContext } from "../provider/Store";
 import displayDate from "../utils/displayDate";
 import DisplayDate from "./DisplayDate";
 import CustomBtn from "./CustomBtn";
-import moment from "moment";
 import InputGroup from "./InputGroup";
 
 interface CreateDutyProps {
@@ -14,7 +13,6 @@ interface CreateDutyProps {
 }
 
 const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
-    // @ts-ignore
     const { StartShift, endShift, duration, createDuty, endDuty } = useContext(StoreContext);
     const [displayCheckIn, setDisplayCheckIn] = useState<string[] | string>([]);
     const [displayCheckOut, setDisplayCheckOut] = useState<string[] | string>([]);
@@ -42,8 +40,7 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
             classNames="alert"
             unmountOnExit
             onEnter={() => closeModal(true)}
-            onExited={() => closeModal(false)}
-        >
+            onExited={() => closeModal(false)}>
             <div className={"form-container h-screen modal z-[99]"} ref={nodeRef}>
                 <div className="container px-4 flex items-center justify-center flex-col">
                     <form onSubmit={onSubmitHandler} className={"pt-7 w-full"}>
