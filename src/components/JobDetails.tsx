@@ -41,7 +41,8 @@ const JobDetails = () => {
 
                         <button
                             className="create-duty py-2 px-3 text-white text-lg hover:bg-cyan-600 rounded-lg bg-[#101d2c]"
-                            onClick={() => setOpenModal(true)}>
+                            onClick={() => setOpenModal(true)}
+                        >
                             Create Duty
                         </button>
 
@@ -62,7 +63,8 @@ const JobDetails = () => {
                 </div>
                 <button
                     className="create-duty py-2 px-3 text-white text-lg hover:bg-cyan-600 rounded-lg bg-[#101d2c]"
-                    onClick={() => setOpenModal(true)}>
+                    onClick={() => setOpenModal(true)}
+                >
                     Create Duty
                 </button>
                 <CreateDuty closeModal={setOpenModal} openModal={openModal} />
