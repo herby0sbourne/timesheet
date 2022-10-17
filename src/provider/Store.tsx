@@ -1,24 +1,41 @@
 import React, { createContext, useEffect, useState } from "react";
 import moment, { Moment } from "moment";
+import DUTY from "../data/DUTY";
+
+export type IDuty = {
+    id: string;
+    userId: number;
+    clockInDay: string;
+    clockOutDay: string;
+    clockedIn: string;
+    clockedOut: string;
+    pay: number;
+    location: string;
+    hoursWorked: number;
+    rate: number;
+};
 
 export interface StoreContextInterface {
-    StartShift: Moment | string;
-    endShift: Moment | string;
+    StartShift: Moment | null;
+    endShift: Moment | null;
     duration: number;
-    createDuty: (date: Moment | string) => void;
-    endDuty: (date: Moment | string) => void;
+    createDuty: (date: Moment | null) => void;
+    endDuty: (date: Moment | null) => void;
+    duties: IDuty[];
 }
 
 interface Props {
     children: React.ReactNode;
 }
 
-export const StoreContext = createContext<StoreContextInterface | null>(null);
+// export const StoreContext = createContext<StoreContextInterface | null>(null);
+export const StoreContext = createContext<StoreContextInterface>({} as StoreContextInterface);
 
 const StoreProvider: React.FC<Props> = ({ children }) => {
-    const [StartShift, setStartDuty] = useState<Moment | string>(moment(new Date()));
-    const [endShift, setEndDuty] = useState<Moment | string>("");
+    const [StartShift, setStartDuty] = useState<Moment | null>(moment(new Date()));
+    const [endShift, setEndDuty] = useState<Moment | null>(null);
     const [duration, setDuration] = useState(0);
+    const [duties, setDuty] = useState(DUTY);
 
     useEffect(() => {
         // @ts-ignore
@@ -35,16 +52,17 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
         setDuration(totalHours);
     }, [StartShift, endShift]);
 
-    const createDuty = (StartShift: Moment | string) => {
+    const createDuty = (StartShift: Moment | null) => {
         setStartDuty(StartShift);
     };
 
-    const endDuty = (endShift: Moment | string) => {
+    const endDuty = (endShift: Moment | null) => {
         setEndDuty(endShift);
     };
 
     return (
-        <StoreContext.Provider value={{ StartShift, endShift, duration, createDuty, endDuty }}>
+        <StoreContext.Provider
+            value={{ StartShift, endShift, duration, duties, createDuty, endDuty }}>
             {children}
         </StoreContext.Provider>
     );
