@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import moment, { Moment } from "moment";
 import DUTY from "../data/DUTY";
+import JOBS from "../data/Jobs";
 
 export type IDuty = {
     id: string;
@@ -15,15 +16,24 @@ export type IDuty = {
     rate: number;
 };
 
+export type IJob = {
+    id: string;
+    title: string;
+    userId: string;
+};
+
 export interface StoreContextInterface {
+    user: object;
     StartShift: Moment | null;
     endShift: Moment | null;
     duration: number;
-    createDuty: (date: Moment | null) => void;
-    endDuty: (date: Moment | null) => void;
+    jobs: IJob[];
     duties: IDuty[];
     // setDuty: React.Dispatch<React.SetStateAction<IDuty[]>>;
     newDuty: (duty: any) => void;
+    createDuty: (date: Moment | null) => void;
+    endDuty: (date: Moment | null) => void;
+    createNewJob: (job: string) => void;
 }
 
 interface Props {
@@ -34,6 +44,8 @@ interface Props {
 export const StoreContext = createContext<StoreContextInterface>({} as StoreContextInterface);
 
 const StoreProvider: React.FC<Props> = ({ children }) => {
+    const [user, setUser] = useState({});
+    const [jobs, setJobs] = useState(JOBS);
     const [StartShift, setStartDuty] = useState<Moment | null>(moment(new Date()));
     const [endShift, setEndDuty] = useState<Moment | null>(null);
     const [duration, setDuration] = useState(0);
@@ -47,7 +59,6 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
         const duration = moment.duration(endTime.diff(startTime));
 
         const hours = duration.asHours();
-        // console.log(hours);
         const totalHours = Math.round(hours);
         // console.log(totalHours);
         if (!totalHours) return;
@@ -63,16 +74,29 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
     };
 
     const newDuty = (duty: IDuty) => {
-        // @ts-ignore
         setDuty((prevState) => {
             return [...prevState, duty];
         });
     };
 
+    const createNewJob = (job: string) => {
+        console.log(job);
+    };
+
     return (
         <StoreContext.Provider
-            value={{ StartShift, endShift, duration, duties, createDuty, endDuty, newDuty }}
-        >
+            value={{
+                user,
+                jobs,
+                StartShift,
+                endShift,
+                duration,
+                duties,
+                createNewJob,
+                createDuty,
+                endDuty,
+                newDuty
+            }}>
             {children}
         </StoreContext.Provider>
     );
