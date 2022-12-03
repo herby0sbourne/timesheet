@@ -1,17 +1,39 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
 type Query {
-  users: [User!]!
-  user(id: ID!): User
-  jobs: [Job!]!
+  duties: [Duties!]!
+  duty(id: ID!): Duties!
   job(id: ID): Job
+  jobs: [Job!]!
+  user(id: ID!): User
+  users: [User!]!
 }
 
-type User {
+type Mutation {
+  createUser(userName: String!): User!
+}
+
+type Duties {
+  clockInDay: String!
+  clockOutDay: String!
+  clockedIn: String!
+  clockedOut: String!
+  hoursWorked: Int!
   id: ID!
-  userName: String!
+  jobId: ID!
+  location: String!
+  pay: Float!
+  rate: Int!
+  userId: ID!
 }
 
 type Job {
   id: ID!
   title: String!
   userId: ID!
+}
+
+type User {
+  id: ID!
+  userName: String!
 }
