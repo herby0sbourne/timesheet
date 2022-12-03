@@ -9,6 +9,7 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import Query from './graphql/resolvers/Query.js';
+import Mutation from './graphql/resolvers/Mutation.js'
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -24,6 +25,7 @@ const schema = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query,
+    Mutation
   },
 });
 
