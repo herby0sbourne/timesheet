@@ -3,6 +3,12 @@ import moment, { Moment } from "moment";
 import DUTY from "../data/DUTY";
 import JOBS from "../data/Jobs";
 
+interface IUser {
+    username: string;
+    password: string;
+    prevState: null;
+}
+
 export type IDuty = {
     id: string;
     userId: number;
@@ -24,16 +30,11 @@ export type IJob = {
 
 export interface StoreContextInterface {
     user: object;
-    StartShift: Moment | null;
-    endShift: Moment | null;
-    duration: number;
     jobs: IJob[];
     duties: IDuty[];
     // setDuty: React.Dispatch<React.SetStateAction<IDuty[]>>;
     newDuty: (duty: any) => void;
-    createDuty: (date: Moment | null) => void;
-    endDuty: (date: Moment | null) => void;
-    createNewJob: (job: string) => void;
+    createNewJob: (job: object) => void;
 }
 
 interface Props {
@@ -44,34 +45,9 @@ interface Props {
 export const StoreContext = createContext<StoreContextInterface>({} as StoreContextInterface);
 
 const StoreProvider: React.FC<Props> = ({ children }) => {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState<IUser | object>({});
     const [jobs, setJobs] = useState(JOBS);
-    const [StartShift, setStartDuty] = useState<Moment | null>(moment(new Date()));
-    const [endShift, setEndDuty] = useState<Moment | null>(null);
-    const [duration, setDuration] = useState(0);
     const [duties, setDuty] = useState(DUTY);
-
-    useEffect(() => {
-        // @ts-ignore
-        const startTime = new moment(StartShift);
-        // @ts-ignore
-        const endTime = new moment(endShift);
-        const duration = moment.duration(endTime.diff(startTime));
-
-        const hours = duration.asHours();
-        const totalHours = Math.round(hours);
-        // console.log(totalHours);
-        if (!totalHours) return;
-        setDuration(totalHours);
-    }, [StartShift, endShift]);
-
-    const createDuty = (StartShift: Moment | null) => {
-        setStartDuty(StartShift);
-    };
-
-    const endDuty = (endShift: Moment | null) => {
-        setEndDuty(endShift);
-    };
 
     const newDuty = (duty: IDuty) => {
         setDuty((prevState) => {
@@ -79,8 +55,12 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
         });
     };
 
-    const createNewJob = (job: string) => {
-        console.log(job);
+    const createNewJob = (job: object) => {
+        // @ts-ignore
+        setJobs((prevState) => {
+            // @ts-ignore
+            return [...prevState, job];
+        });
     };
 
     return (
@@ -88,13 +68,8 @@ const StoreProvider: React.FC<Props> = ({ children }) => {
             value={{
                 user,
                 jobs,
-                StartShift,
-                endShift,
-                duration,
                 duties,
                 createNewJob,
-                createDuty,
-                endDuty,
                 newDuty
             }}>
             {children}

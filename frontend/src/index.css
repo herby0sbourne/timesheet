@@ -1,3 +1,4 @@
+/*noinspection CssUnknownTarget*/
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap");
 
 @tailwind base;
@@ -8,6 +9,20 @@
     html {
         font-family: "Raleway", sans-serif;
     }
+}
+
+body {
+    margin: 0;
+    display: flex;
+    /*place-items: center;*/
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    flex: 1;
 }
 
 .ModalOpen {

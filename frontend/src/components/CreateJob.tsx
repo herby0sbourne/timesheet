@@ -13,8 +13,14 @@ const CreateJob = () => {
         const target = e.target as typeof e.target & {
             job: { value: string };
         };
-        const job = target.job.value;
-        if (job === "") return setError("invalid Job Title");
+        const titleJob = target.job.value;
+        if (titleJob === "") return setError("invalid Job Title");
+
+        const job = {
+            id: "dbfb-dfbdf-bdb",
+            title: titleJob,
+            userId: "4"
+        };
         createNewJob(job);
         navigate("/");
     };

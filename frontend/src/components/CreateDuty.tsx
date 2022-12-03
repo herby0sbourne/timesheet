@@ -7,6 +7,7 @@ import DisplayDate from "./DisplayDate";
 import CustomBtn from "./CustomBtn";
 import InputGroup from "./InputGroup";
 import { v4 as uuidv4 } from "uuid";
+import moment, { Moment } from "moment/moment";
 
 interface CreateDutyProps {
     openModal: boolean;
@@ -14,8 +15,11 @@ interface CreateDutyProps {
 }
 
 const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
-    const { StartShift, endShift, duration, createDuty, endDuty, newDuty } =
-        useContext(StoreContext);
+    const { newDuty } = useContext(StoreContext);
+    const [StartShift, setStartDuty] = useState<Moment | null>(moment(new Date()));
+    const [endShift, setEndDuty] = useState<Moment | null>(null);
+    const [duration, setDuration] = useState(0);
+
     const [displayCheckIn, setDisplayCheckIn] = useState<string[] | string>([]);
     const [displayCheckOut, setDisplayCheckOut] = useState<string[] | string>([]);
     const nodeRef = useRef(null);
@@ -28,12 +32,25 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
         setDisplayCheckOut(displayDate(endShift));
     }, [endShift]);
 
+    useEffect(() => {
+        const startTime = moment(StartShift);
+        const endTime = moment(endShift);
+
+        const duration = moment.duration(endTime.diff(startTime));
+        const hours = duration.asHours();
+        const totalHours = Math.round(hours);
+
+        if (!totalHours) return;
+
+        setDuration(totalHours);
+    }, [StartShift, endShift]);
+
     const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const pay = duration * 310;
         const duty = {
             id: uuidv4(),
-            userId: 2,
+            userId: 4,
             clockInDay: StartShift?.format(),
             clockOutDay: endShift?.format(),
             clockedIn: StartShift?.format("LT"),
@@ -63,12 +80,12 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
                     <form onSubmit={onSubmitHandler} className={"pt-7 w-full"}>
                         <div className="start-duty text-center">
                             <h1 className={"font-semibold text-xl mb-3"}>Start Duty</h1>
-                            <MaterialUIPickers dutyType={createDuty} today={new Date()} />
+                            <MaterialUIPickers dutyType={setStartDuty} today={new Date()} />
                             <DisplayDate displayDate={displayCheckIn} timeColor />
                         </div>
                         <div className="start-duty text-center">
                             <h1 className={"font-semibold text-xl mb-3"}>End Duty</h1>
-                            <MaterialUIPickers dutyType={endDuty} today={null} />
+                            <MaterialUIPickers dutyType={setEndDuty} today={null} />
                             <DisplayDate displayDate={displayCheckOut} />
                         </div>
 
@@ -81,8 +98,8 @@ const CreateDuty = ({ openModal, closeModal }: CreateDutyProps) => {
                         <InputGroup type="text" name="location" placeholder="Location / Job" />
 
                         <div className="btn-options flex justify-end gap-x-5 mt-10">
-                            <CustomBtn title={"Cancel"} closeModal={closeModal} />
-                            <CustomBtn title={"Create"} closeModal={closeModal} />
+                            <CustomBtn type={"button"} title={"Cancel"} closeModal={closeModal} />
+                            <CustomBtn type={"submit"} title={"Create"} closeModal={closeModal} />
                         </div>
                     </form>
                 </div>

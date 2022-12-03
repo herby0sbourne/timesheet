@@ -3,18 +3,29 @@ import { useParams } from "react-router-dom";
 import { StoreContext } from "../provider/Store";
 import CreateDuty from "./CreateDuty";
 import Duty from "./Duty";
+import formatPay from "../utils/fromatPay";
 
 const JobDetails = () => {
+    const [openModal, setOpenModal] = useState(false);
     const { duties } = useContext(StoreContext);
     const { id } = useParams();
 
-    const filterDuties = duties
-        .map((duty) => {
-            return duty;
-        })
-        .filter((duty) => {
-            return duty.userId.toString() === id;
-        });
+    const filterDuties = duties.filter((duty) => {
+        return duty.userId.toString() === id;
+    });
+
+    // @ts-ignore
+    const hoursPay = filterDuties.reduce(
+        (previousValue, currentValue) => {
+            const total = { hours: 0, pay: 0 };
+
+            total.pay = previousValue.pay + currentValue.pay;
+            total.hours = previousValue.hours + currentValue.hoursWorked;
+
+            return total;
+        },
+        { hours: 0, pay: 0 }
+    );
 
     const hours = filterDuties.reduce((prevValue, currValue): number => {
         return prevValue + currValue.hoursWorked;
@@ -23,10 +34,6 @@ const JobDetails = () => {
     const pay = filterDuties.reduce((prevValue, currValue): number => {
         return prevValue + currValue.pay;
     }, 0);
-
-    console.log(hours);
-
-    const [openModal, setOpenModal] = useState(false);
 
     return (
         <>
@@ -41,8 +48,7 @@ const JobDetails = () => {
 
                         <button
                             className="create-duty py-2 px-3 text-white text-lg hover:bg-cyan-600 rounded-lg bg-[#101d2c]"
-                            onClick={() => setOpenModal(true)}
-                        >
+                            onClick={() => setOpenModal(true)}>
                             Create Duty
                         </button>
 
@@ -51,7 +57,7 @@ const JobDetails = () => {
 
                             <div className="hours">{hours}h</div>
 
-                            <div className="money text-[#5aba8a]">${pay}</div>
+                            <div className="money text-[#5aba8a]">{formatPay.format(pay)}</div>
                         </div>
                     </div>
 
@@ -63,8 +69,7 @@ const JobDetails = () => {
                 </div>
                 <button
                     className="create-duty py-2 px-3 text-white text-lg hover:bg-cyan-600 rounded-lg bg-[#101d2c]"
-                    onClick={() => setOpenModal(true)}
-                >
+                    onClick={() => setOpenModal(true)}>
                     Create Duty
                 </button>
                 <CreateDuty closeModal={setOpenModal} openModal={openModal} />
